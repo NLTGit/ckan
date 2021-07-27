@@ -6,10 +6,7 @@ MAINTAINER Open Knowledge
 RUN apt-get -q -y update \
     && DEBIAN_FRONTEND=noninteractive apt-get -q -y upgrade \
     && apt-get -q -y install \
-        python-dev \
-        python-pip \
-        python-virtualenv \
-        python-wheel \
+        python2.7-dev \
         libpq-dev \
         libxml2-dev \
         libxslt-dev \
@@ -38,6 +35,9 @@ RUN useradd -r -u 900 -m -c "ckan account" -d $CKAN_HOME -s /bin/false ckan
 
 # Setup virtual environment for CKAN
 RUN mkdir -p $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
+    wget https://bootstrap.pypa.io/pip/2.7/get-pip.py -O get-pip.py && \
+    python get-pip.py && \
+    pip2 install virtualenv && \
     virtualenv $CKAN_VENV && \
     ln -s $CKAN_VENV/bin/pip /usr/local/bin/ckan-pip &&\
     ln -s $CKAN_VENV/bin/paster /usr/local/bin/ckan-paster
